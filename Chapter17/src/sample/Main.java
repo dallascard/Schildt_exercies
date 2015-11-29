@@ -2,13 +2,17 @@ package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Group;
+import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import javafx.scene.input.*;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
 import javafx.event.*;
 import javafx.geometry.*;
+import javafx.scene.paint.Color;
+import java.awt.MouseInfo;
 
 public class Main extends Application {
 
@@ -18,9 +22,6 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void init() {
-        System.out.println("In init.");
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -33,44 +34,35 @@ public class Main extends Application {
         // Set the title
         primaryStage.setTitle("Hello World");
 
-        // Createa a root node (for a flow layout)
-        FlowPane rootNode = new FlowPane(10, 10);
-        rootNode.setAlignment(Pos.CENTER);
+        Group root = new Group();
+        Scene scene = new Scene(root, 600, 330);
 
-        // Create a scene
-        Scene myScene = new Scene(rootNode, 300, 100);
+        GridPane gridpane = new GridPane();
+        gridpane.setPadding(new Insets(5));
+        gridpane.setHgap(10);
+        gridpane.setVgap(10);
 
-        // Set the scene on the stage
-        primaryStage.setScene(myScene);
+        final ImageView imv = new ImageView();
 
-        // Create a label
-        response = new Label("Push a button");
-
-        // Create two push buttons
-        Button btnUp = new Button("Up");
-        Button btnDown = new Button("Down");
-
-        // event handler using anonymous inner class
-        btnUp.setOnAction(new EventHandler<ActionEvent>() {
+        imv.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-                response.setText("You pressed Up.");
+            public void handle(MouseEvent event) {
+                System.out.println(event.getSceneX());
+                System.out.println(event.getSceneY());
             }
         });
 
-        // event handler using lambda expression
-        btnDown.setOnAction( (ae) -> response.setText("You pressed Down."));
+        final Image image2 = new Image(Main.class.getResourceAsStream("IMG_1319.JPG"));
+        imv.setImage(image2);
 
-        // Add the label ot the scene graph
-        rootNode.getChildren().addAll(btnUp, btnDown, response);
+        final HBox pictureRegion = new HBox();
 
-        // Show the stage and its scene;
+        pictureRegion.getChildren().add(imv);
+        gridpane.add(pictureRegion, 1, 1);
+
+        root.getChildren().add(gridpane);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    public void stop() {
-        System.out.println("Stopping");
-    }
-
 
 }
